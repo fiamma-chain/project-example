@@ -1,0 +1,18 @@
+[package]
+name = "bcli"
+version = "0.1.0"
+edition = "2021"
+description = "BitVM Bridge Cli Tools"
+
+[dependencies]
+bridge-wallet = { path = "../wallet" }
+types = { path = "../types" }
+config = { path = "../config" }
+bitcoin_client = { path = "../bitcoin_client" }
+clap = { workspace = true }
+clap_complete = { workspace = true }
+colored = { workspace = true }
+anyhow = { workspace = true }
+tokio = { workspace = true }
+bitcoin = { workspace = true }
+jsonrpsee = { workspace = true }

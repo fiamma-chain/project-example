@@ -1,0 +1,41 @@
+services:
+  db:
+    container_name: bitvm-bridge-DB
+    platform: linux/amd64 #for platform error on Apple M1 chips
+    restart: unless-stopped
+    env_file: .env
+    image: postgres:14
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+      - strapi-data:/var/lib/postgresql/data/ #using a volume
+      #- ./data:/var/lib/postgresql/data/ # if you want to use a bind folder
+      - ./scripts/main_postgresql.conf:/etc/postgresql/postgresql.conf
+
+    expose:
+      - "7432" # Publishes 5433 to other containers but NOT to host machine
+    ports:
+      - "7432:7432"
+    command: -p 7432
+    networks:
+      - bitvm-bridge-db-sync
+
+  init-db:
+    image: alpine:latest
+    volumes:
+      - ./migrations:/migrations
+      - init-db-data:/tmp/docker-entrypoint-initdb.d
+    entrypoint: >
+      sh -c "cp -r /migrations/* /tmp/docker-entrypoint-initdb.d &&
+            echo 'Initialization scripts copied, exiting...'"
+    depends_on:
+      - db
+
+volumes:
+  strapi-data:
+
+networks:
+  bitvm-bridge-db-sync:
+    driver: bridge

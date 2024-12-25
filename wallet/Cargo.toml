@@ -1,0 +1,13 @@
+[package]
+name = "bridge-wallet"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+types = { path = "../types" }
+bridge_rpc = { path = "../rpc", default-features = true }
+config = { path = "../config" }
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+bitcoin = { workspace = true }
+bitcoin_client = { path = "../bitcoin_client" }

@@ -1,0 +1,17 @@
+[package]
+name = "bridge_rpc"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+types = { path = "../types" }
+jsonrpsee = { workspace = true }
+itertools = "0.10.1"
+pin-project-lite = "0.2.13"
+thiserror = { workspace = true }
+bitcoin = { workspace = true }
+
+[features]
+default = ["server", "client"]
+server = ["jsonrpsee/server"]
+client = ["jsonrpsee/client"]

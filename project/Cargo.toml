@@ -1,0 +1,60 @@
+[package]
+name = "project-name"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "project-name"
+path = "src/bin/main.rs"
+
+[dependencies]
+logs = { path = "../logs" }
+types = { path = "../types" }
+bridge_rpc = { path = "../rpc" }
+dal = { path = "../dal" }
+config = { path = "../config" }
+common = { path = "../common" }
+bitcoin_client = { path = "../bitcoin_client" }
+health_check = { path = "../health_check" }
+tokio = { workspace = true }
+anyhow = { workspace = true }
+hex = { workspace = true }
+futures = { workspace = true }
+bitcoin = { workspace = true }
+ctrlc = { version = "3.1", features = ["termination"] }
+dotenv = "0.15.0"
+pin-project-lite = "0.2.13"
+tower-http = { version = "0.4.1", features = ["full"] }
+tower = { version = "0.4.13", features = ["full"] }
+axum = { version = "0.6.19", default-features = false, features = [
+    "http1",
+    "json",
+    "tokio",
+] }
+jsonrpsee = { version = "0.22.0", default-features = false, features = [
+    "macros",
+    "server",
+    "client",
+] }
+governor = "0.4.2"
+reqwest = { workspace = true }
+thread_local = "1.1"
+tracing = "0.1.26"
+serde = { version = "1.0", features = ["derive"] }
+web3 = { version = "0.19.0", default-features = false, features = [
+    "http-rustls-tls",
+    "test",
+    "signing",
+] }
+async-trait = "0.1"
+# ethers = { version = "2.0", features = ["ws"] }
+alloy = { version = "0.5.4", features = ["full"] }
+url = "2.5.2"
+strum = { workspace = true }
+serde_json = { workspace = true }
+bincode = { workspace = true }
+sqlx = { workspace = true }
+
+[dev-dependencies]
+bcli = { path = "../cli" }
+bridge-wallet = { path = "../wallet" }
