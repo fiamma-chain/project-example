@@ -9,7 +9,7 @@ use {{crate_name}}::{genesis_init, initialize_tasks};
 async fn main() -> anyhow::Result<()> {
     dotenv().ok();
 
-    let (subscriber, _guard) = get_subscriber("bitvm-bridge".into(), "info".into());
+    let (subscriber, _guard) = get_subscriber("{{project-name}}".into(), "info".into());
     init_subscriber(subscriber);
     set_panic_hook();
     logs::info!("init_subscriber finished");

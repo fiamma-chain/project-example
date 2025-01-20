@@ -15,7 +15,7 @@ pub fn get_subscriber(
     let mut base_path = std::env::current_dir().expect("Failed to determine the current directory");
     base_path.push(".logs");
     base_path.push(&name);
-    let file_appender = tracing_appender::rolling::hourly(base_path, "bitvm-bridge.log");
+    let file_appender = tracing_appender::rolling::hourly(base_path, "{{project-name}}.log");
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
     let file_layer = BunyanFormattingLayer::new(name, non_blocking);
     let res = Registry::default()
