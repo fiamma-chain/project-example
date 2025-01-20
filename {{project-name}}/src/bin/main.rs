@@ -3,7 +3,7 @@ use std::time::Duration;
 use common::{setup_sigint_handler, wait_for_tasks};
 use dotenv::dotenv;
 use logs::telemetry::{get_subscriber, init_subscriber, set_panic_hook};
-use {{project-name}}::{genesis_init, initialize_tasks};
+use {{crate_name}}::{genesis_init, initialize_tasks};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
