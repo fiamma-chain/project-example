@@ -7,7 +7,7 @@ members = [
     "dal",
     "config",
     "health_check",
-    "{{project-name}}",
+    "core",
     "cli",
     "wallet",
     "bitcoin_client"
