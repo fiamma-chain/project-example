@@ -1,10 +1,10 @@
 use std::panic;
 
 use tracing::{subscriber::set_global_default, Subscriber};
-use tracing_appender::non_blocking::WorkerGuard;
-use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
+use tracing_appender::{non_blocking::WorkerGuard, rolling};
 use tracing_log::LogTracer;
-use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
+use tracing_subscriber::fmt::time::ChronoUtc;
+use tracing_subscriber::{fmt, layer::SubscriberExt, EnvFilter, Registry};
 
 pub fn get_subscriber(
     name: String,
@@ -12,16 +12,29 @@ pub fn get_subscriber(
 ) -> (impl Subscriber + Send + Sync, WorkerGuard) {
     let env_filter =
         EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
+    let environment = std::env::var("BITVM_BRIDGE_ENVIRONMENT").unwrap_or("local".to_string());
+    let with_ansi = environment != "local";
     let mut base_path = std::env::current_dir().expect("Failed to determine the current directory");
     base_path.push(".logs");
     base_path.push(&name);
-    let file_appender = tracing_appender::rolling::hourly(base_path, "{{project-name}}.log");
+    let file_appender = rolling::RollingFileAppender::builder()
+        .filename_prefix("{{project-name}}")
+        .filename_suffix("log")
+        .rotation(rolling::Rotation::HOURLY)
+        .build(base_path)
+        .expect("Failed to create file appender");
+
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
-    let file_layer = BunyanFormattingLayer::new(name, non_blocking);
-    let res = Registry::default()
-        .with(env_filter)
-        .with(JsonStorageLayer)
-        .with(file_layer);
+    let file_layer = fmt::layer()
+        .with_writer(non_blocking)
+        .with_target(true)
+        .with_file(true)
+        .with_line_number(true)
+        .with_timer(ChronoUtc::new("%Y-%m-%dT%H:%M:%S%.3fZ".to_string()))
+        .with_ansi(with_ansi)
+        .with_level(true);
+
+    let res = Registry::default().with(env_filter).with(file_layer);
     (res, guard)
 }
 

@@ -4,9 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tracing = { workspace = true }
-tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
-tracing-bunyan-formatter = "0.3"
+tracing = { version = "0.1.26", features = ["log"] }
+tracing-subscriber = { version = "0.3", features = [
+    "registry",
+    "env-filter",
+    "chrono",
+] }
 tracing-log = "0.1"
 tracing-appender = "0.2"
-serde = { workspace = true }
+serde = { version = "1", features = ["derive"] }
